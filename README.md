@@ -1,6 +1,6 @@
 # ComputationalMethods
 
-homework_A01644972.l (lexical analyzer):
+# homework_A01644972.l (lexical analyzer):
 
 vim homework_A01644972.l
 
