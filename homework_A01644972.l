@@ -3,7 +3,7 @@
 %}
 
 DIGIT   [0-9]
-ID      [a-z]
+ID      [a-eh-oz]
 FNUM    [0-9]+\.[0-9]+
 INUM    [0-9]+
 
@@ -25,6 +25,7 @@ p              { printf("print "); }
 %%
 
 int main() {
+    printf("Enter text to analyze (Ctrl+D to end):\n");
     yylex();
     return 0;
 }
