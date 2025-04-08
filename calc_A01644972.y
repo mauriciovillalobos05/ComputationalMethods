@@ -46,7 +46,8 @@ term_prime:
 factor:
       '(' expression ')'           { $$ = $2; }
     | INUM                         { $$ = $1; }
-    | ID                           { $$ = $1; } /* You can implement a symbol table later */
+    | FNUM                         { $$ = $1; }
+    | ID                           { $$ = $1; } 
     ;
 
 %%
