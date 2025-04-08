@@ -18,7 +18,9 @@ void yyerror(const char *s) {
 %%
 
 statement:
-      ID ASSIGN expression         { printf("Assigned: %c = %d\n", $1, $3); }
+    INTDCL ID                  { printf("Declared int variable: %c\n", $2); }
+    | FLOATDCL ID                { printf("Declared float variable: %c\n", $2); }
+    |  ID ASSIGN expression         { printf("Assigned: %c = %d\n", $1, $3); }
     | PRINT ID                     { printf("Print: %c\n", $2); }
     | expression                   { printf("= %d\n", $1); }
     ;
