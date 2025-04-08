@@ -54,7 +54,15 @@ factor:
 
 %%
 
-int main() {
-    printf("Enter an expression:\n");
+int main(int argc, char **argv) {
+    if (argc > 1) {
+        FILE *file = fopen(argv[1], "r");
+        if (!file) {
+            perror("Could not open file");
+            return 1;
+        }
+        yyin = file; 
+    }
+
     return yyparse();
 }
