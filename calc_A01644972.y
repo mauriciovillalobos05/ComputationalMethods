@@ -13,35 +13,40 @@ void yyerror(const char *s) {
 %token PLUS SUBTRACT MULTIPLY DIVIDE
 %token COMMENT
 
-%left PLUS SUBTRACT
-%left MULTIPLY DIVIDE
-
 %start statement
 
 %%
 
 statement:
-      ID ASSIGN expression        { printf("Assigned: %c = %d\n", $1, $3); }
-    | PRINT ID                    { printf("Print: %c\n", $2); }
-    | expression                  { printf("= %d\n", $1); }
+      ID ASSIGN expression         { printf("Assigned: %c = %d\n", $1, $3); }
+    | PRINT ID                     { printf("Print: %c\n", $2); }
+    | expression                   { printf("= %d\n", $1); }
     ;
 
 expression:
-      term                        { $$ = $1; }
-    | expression PLUS term        { $$ = $1 + $3; }
-    | expression SUBTRACT term    { $$ = $1 - $3; }
+      term expression_prime        { $$ = $2 == -1 ? $1 : $2; }
+    ;
+
+expression_prime:
+      PLUS term expression_prime   { $$ = $2 + ($3 == -1 ? 0 : $3); }
+    | SUBTRACT term expression_prime { $$ = -$2 + ($3 == -1 ? 0 : $3); }
+    | /* ε */                      { $$ = -1; }
     ;
 
 term:
-      factor                      { $$ = $1; }
-    | term MULTIPLY factor        { $$ = $1 * $3; }
-    | term DIVIDE factor          { $$ = $1 / $3; }
+      factor term_prime            { $$ = $2 == -1 ? $1 : $2; }
+    ;
+
+term_prime:
+      MULTIPLY factor term_prime   { $$ = $2 * ($3 == -1 ? 1 : $3); }
+    | DIVIDE factor term_prime     { $$ = $2 / ($3 == -1 ? 1 : $3); }
+    | /* ε */                      { $$ = -1; }
     ;
 
 factor:
-      INUM                        { $$ = $1; }
-    | '(' expression ')'          { $$ = $2; }
-    | ID                          { $$ = $1; }  
+      '(' expression ')'           { $$ = $2; }
+    | INUM                         { $$ = $1; }
+    | ID                           { $$ = $1; } /* You can implement a symbol table later */
     ;
 
 %%
