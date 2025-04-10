@@ -1,6 +1,6 @@
 all:
-	yacc -d calc_A01644972.y
 	lex calc_A01644972.l
+	yacc -d calc_A01644972.y
 	gcc y.tab.c lex.yy.c -o calc_A01644972
 
 clean:
