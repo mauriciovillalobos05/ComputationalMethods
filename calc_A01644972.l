@@ -1,7 +1,6 @@
 %{
 #include "y.tab.h"
-#include <stdlib.h>  
-extern int yylval;
+#include <stdlib.h>
 %}
 
 %option noyywrap
@@ -9,34 +8,29 @@ extern int yylval;
 DIGIT   [0-9]
 FNUM    {DIGIT}+\.{DIGIT}+
 INUM    {DIGIT}+
-IDCHAR  [a-eh-oz]
+IDCHAR  [a-egh-hozq-z]
 
 %%
 
-{FNUM}             { 
-                      yylval = 0; 
-                      return FNUM;
-                    }
+{FNUM}   { yylval.fval = atof(yytext); return FNUM; }
+{INUM}   { yylval.fval = atoi(yytext); return INUM; }
+{IDCHAR} { yylval.cval = yytext[0]; return ID; }
 
-{INUM}             { yylval = atoi(yytext); return INUM; }
+\/\/.*   { return COMMENT; }
 
-{IDCHAR}           { yylval = yytext[0]; return ID; }
+f        { return FLOATDCL; }
+i        { return INTDCL; }
+=        { return ASSIGN; }
+-        { return SUBTRACT; }
+\+       { return PLUS; }
+\*       { return MULTIPLY; }
+\/       { return DIVIDE; }
+p        { return PRINT; }
 
-\/\/.*             { return COMMENT; }
+[ \t]+   { /* skip whitespace */ }
 
-f                  { return FLOATDCL; }
-i                  { return INTDCL; }
-=                  { return ASSIGN; }
--                  { return SUBTRACT; }
-\+                 { return PLUS; }
-\*                 { return MULTIPLY; }
-\/                 { return DIVIDE; }
-p                  { return PRINT; }
+\n       { /* skip newline */ }
 
-[ \t]+             { /* skip whitespace */ }
-
-\n                 { return 0; }  
-
-.                  { return yytext[0]; }
+.        { return yytext[0]; }
 
 %%
